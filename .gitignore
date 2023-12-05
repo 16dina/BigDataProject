@@ -1,7 +1,6 @@
 venv*
 temp
 TODO.md
-*.pkl
 models/first_modelIngrid.pth
 models
 models\first_modelIngrid.pth
