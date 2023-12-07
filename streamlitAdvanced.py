@@ -62,7 +62,7 @@ with images:
                 col3.image(image, caption=f"Image {i + 1}")
             else:
                 col4.image(image, caption=f"Image {i + 1}")
-    
+
     if selected_displayed_category:
         selected_index = displayed_categories.index(selected_displayed_category)
         selected_category = actual_categories[selected_index]
@@ -75,12 +75,78 @@ with Model:
     col9, col10 = st.columns(2)
     col5, col6, col7, col8 = st.columns(4)
     
+
     with col9:
+        st.header("Make your own model")
+        col11, col12 = st.columns(2)
+        with col11:
+            #augmentations
+            aug_map = {
+                "Flip": Flip(),
+                "Rotate": Rotate(),
+                "Brightness": Brightness(),
+                "Contrast": Contrast(),
+                "Zoom": Zoom(),
+            }
+            aug_options = list(aug_map.keys())
+            selected_aug = st.multiselect("Select Augmentations", aug_options)
+            selected_tfms = [aug_map[t] for t in selected_aug]
+
+            #epochs
+            epochs = st.number_input("Number of Epochs", min_value=1, max_value=10, value=6)
+        with col12:
+            #learning rate
+            learning_rate_options = {
+                "0.1": 0.1,
+                "0.01": 0.01,
+                "0.001": 0.001,
+                "0.00001": 0.00001,
+                "0.000001": 0.000001,
+            }
+            lr_values = list(learning_rate_options.values())
+            selected_lr = st.selectbox("Select Learning Rate", list(learning_rate_options.keys()))
+
+            #architecture
+            arch_options = {
+                "ResNet34": resnet34,
+                "ResNet50": resnet50,
+                "Alexnet": alexnet,
+                "VGG": vgg16_bn,
+            }
+
+            arch_names = list(arch_options.keys())
+            selected_arch = st.selectbox("Select an Architecture", arch_names)
+
+
+
+        if st.button(":green[Train Model]"):
+            if len(selected_aug) > 0:
+                #train the model
+                leaves = DataBlock(
+                    blocks=(ImageBlock, CategoryBlock),
+                    get_items=get_image_files,
+                    get_y=parent_label,
+                    item_tfms=Resize(460),
+                    batch_tfms=selected_tfms        
+                )
+
+                dls = leaves.dataloaders("./datasetsingrid")
+
+                model = vision_learner(dls, arch_options[selected_arch], metrics=accuracy).to_fp16()
+                model.fine_tune(epochs, freeze_epochs=3, base_lr=learning_rate_options[selected_lr])
+
+                interp = ClassificationInterpretation.from_learner(model)
+                st.write(interp.plot_confusion_matrix())
+                learn = vision_learner(dls, resnet50, metrics=error_rate)
+
+                class_names = model.dls.vocab                
+            else:
+                st.warning("Please select at least one transformation")
+
+        
         st.header("Classify your image")
 
-        model = load_learner('./export.pkl')
-        class_names = model.dls.vocab
-        #upload images
+        #upload image
         uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "png"])
     with col5:
         if uploaded_file is not None:
