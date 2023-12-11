@@ -92,7 +92,9 @@ with Model:
     with col9:
         st.header("Classify your image")
 
-        model = load_learner('./export.pkl')
+        #model = load_learner('./export.pkl')
+        model_path = Path('./export.pkl')
+        model = load_learner(model_path)
         class_names = model.dls.vocab
         #upload images
         uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "png"])
