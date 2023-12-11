@@ -4,6 +4,8 @@ from fastbook import *
 from fastai.callback.fp16 import *
 from fastai.vision.all import *
 from PIL import Image
+from pathlib import Path
+
 
 
 st.set_page_config(page_title="Leaf Classifier", page_icon="🍃", layout="wide")
@@ -24,35 +26,47 @@ with EDA:
     with col2:
         #show how many images each class has
         with st.expander(":green[# of images]", expanded=False):
-            dataset_train_dir = './datasetsingrid'
-            classes_tr = os.listdir(dataset_train_dir)
+            dataset_train_dir = Path('./datasetsingrid')
+            classes_tr = [entry.name for entry in dataset_train_dir.iterdir() if entry.is_dir()]
+
+            #classes_tr = os.listdir(dataset_train_dir)
             for class_tr in classes_tr:
-                class_path = os.path.join(dataset_train_dir, class_tr)
-                num_images = len(os.listdir(class_path))
-                capitalized_class_tr = class_tr.capitalize()
-                if "_" in capitalized_class_tr:
-                    capitalized_class_tr = capitalized_class_tr.replace("_", " ")
+                class_path = dataset_train_dir / class_tr
+                num_images = len(list(class_path.glob('*')))  # Counting images in the directory
+                capitalized_class_tr = class_tr.capitalize().replace("_", " ")
                 st.write(f"{capitalized_class_tr}: {num_images} images")
+
+                # class_path = os.path.join(dataset_train_dir, class_tr)
+                # num_images = len(os.listdir(class_path))
+                # capitalized_class_tr = class_tr.capitalize()
+                # if "_" in capitalized_class_tr:
+                #     capitalized_class_tr = capitalized_class_tr.replace("_", " ")
+                # st.write(f"{capitalized_class_tr}: {num_images} images")
 
 #selectbox with all the classes
 with col2:
-    dataset_dir = './datasetsingrid'
-    categories = os.listdir(dataset_dir)
+    dataset_dir = Path('./datasetsingrid')
+    categories = [entry.name for entry in dataset_dir.iterdir() if entry.is_dir()]
     displayed_categories = [category.capitalize().replace("_", " ") for category in categories]
-    actual_categories = categories 
+    actual_categories = categories
     selected_displayed_category = st.selectbox('Select a category', options=displayed_categories)
+
+    # dataset_dir = './datasetsingrid'
+    # categories = os.listdir(dataset_dir)
+    # displayed_categories = [category.capitalize().replace("_", " ") for category in categories]
+    # actual_categories = categories 
+    # selected_displayed_category = st.selectbox('Select a category', options=displayed_categories)
                   
 with images:    
     #show 4 random images from each class
     def show_category_images(category_dir):
-        images = os.listdir(category_dir)
+        images = list(Path(category_dir).glob('*'))
         random.shuffle(images)  
         num_images_to_display = 4 
 
         col1, col2, col3, col4 = st.columns(4)
 
-        for i in range(min(num_images_to_display, len(images))):
-            image_path = os.path.join(category_dir, images[i])
+        for i, image_path in enumerate(images[:num_images_to_display]):
             image = Image.open(image_path)
             if i % 4 == 0:
                 col1.image(image, caption=f"Image {i + 1}")
@@ -67,7 +81,7 @@ with images:
         selected_index = displayed_categories.index(selected_displayed_category)
         selected_category = actual_categories[selected_index]
         st.subheader(f"Images of category: {selected_displayed_category}")
-        category_dir = os.path.join(dataset_dir, selected_category)
+        category_dir = dataset_dir / selected_category
         images_placeholder = st.empty()
         show_category_images(category_dir)
 
