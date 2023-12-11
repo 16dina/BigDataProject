@@ -70,6 +70,8 @@ with images:
         category_dir = os.path.join(dataset_dir, selected_category)
         images_placeholder = st.empty()
         show_category_images(category_dir)
+        
+model = None
 
 with Model:
     col9, col10 = st.columns(2)
@@ -118,7 +120,6 @@ with Model:
             selected_arch = st.selectbox("Select an Architecture", arch_names)
 
 
-
         if st.button(":green[Train Model]"):
             if len(selected_aug) > 0:
                 #train the model
@@ -137,7 +138,6 @@ with Model:
 
                 interp = ClassificationInterpretation.from_learner(model)
                 st.write(interp.plot_confusion_matrix())
-                learn = vision_learner(dls, resnet50, metrics=error_rate)
 
                 class_names = model.dls.vocab                
             else:
