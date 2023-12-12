@@ -23,7 +23,7 @@ with EDA:
 
     with col2:
         #show how many images each class has
-        with st.expander(":green[# of images]", expanded=False):
+        with st.expander("# of images", expanded=False):
             dataset_train_dir = './datasetsingrid'
             classes_tr = os.listdir(dataset_train_dir)
             for class_tr in classes_tr:
@@ -120,7 +120,7 @@ with Model:
             selected_arch = st.selectbox("Select an Architecture", arch_names)
 
 
-        if st.button(":green[Train Model]"):
+        if st.button("Train Model"):
             if len(selected_aug) > 0:
                 #train the model
                 leaves = DataBlock(
@@ -154,7 +154,7 @@ with Model:
             st.image(image, use_column_width=True)
     with col5:
             #make predictions with the model
-            classify_button = st.button(":green[Classify]")
+            classify_button = st.button("Classify")
             if classify_button:
                 with st.spinner('Classifying...'):
                     with col6:
