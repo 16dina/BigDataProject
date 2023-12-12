@@ -59,7 +59,7 @@ with Model:
         #model = AutoModelForSequenceClassification.from_pretrained(model_directory, local_files_only=True)
         #tokenizer = AutoTokenizer.from_pretrained(model_directory, local_files_only=True)
         #pipeline =  TextClassificationPipeline(model=model, tokenizer=tokenizer)
-        model = AutoModel.from_pretrained("./path_to_your_model")
+        model = AutoModel.from_pretrained(model_directory)
         col5, col6 = st.columns(2)
         with col5:
             # User enters a comment
@@ -71,7 +71,7 @@ with Model:
                 st.write("")
                 st.write("")
                 # Predict the comment and show what it predicted
-                output = pipeline(comment)
+                #output = pipeline(comment)
                 label = output[0]['label']
                 score = output[0]['score'] * 100
                 st.write('**Prediction**:', label)
