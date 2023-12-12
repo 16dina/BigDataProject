@@ -3,9 +3,7 @@ import streamlit as st
 import pandas as pd
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 from transformers import AutoModelForSequenceClassification, AutoTokenizer, TextClassificationPipeline
-from transformers import AutoModel, AutoTokenizer
-import os
-os.environ["TRANSFORMERS_OFFLINE"] = "1"
+
 # Page styling
 st.set_page_config(page_title="NLP", page_icon="📜", layout="wide")
 
@@ -57,7 +55,7 @@ with Model:
         st.header("Classify your comment")
         # Load the model
         model_directory = 'NLPStreamlit/model'
-        model = AutoModel.from_pretrained(model_directory, local_files_only=True)
+        model = AutoModelForSequenceClassification.from_pretrained(model_directory, local_files_only=True)
         tokenizer = AutoTokenizer.from_pretrained(model_directory, local_files_only=True)
         pipeline =  TextClassificationPipeline(model=model, tokenizer=tokenizer)
         col5, col6 = st.columns(2)
