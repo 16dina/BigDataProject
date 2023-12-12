@@ -6,3 +6,4 @@ models
 models\first_modelIngrid.pth
 DLProj_env
 datasetSplit
+NLPStreamlit/comments_model_v2.pkl
