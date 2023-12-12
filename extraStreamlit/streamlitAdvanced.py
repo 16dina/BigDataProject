@@ -71,8 +71,6 @@ with images:
         images_placeholder = st.empty()
         show_category_images(category_dir)
         
-model = None
-
 with Model:
     col9, col10 = st.columns(2)
     col5, col6, col7, col8 = st.columns(4)
