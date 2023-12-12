@@ -54,7 +54,7 @@ with EDA:
 with Model:
         st.header("Classify your comment")
         # Load the model
-        model_directory = 'model'
+        model_directory = '/model'
         model = AutoModelForSequenceClassification.from_pretrained(model_directory)
         tokenizer = AutoTokenizer.from_pretrained(model_directory)
         pipeline =  TextClassificationPipeline(model=model, tokenizer=tokenizer)
