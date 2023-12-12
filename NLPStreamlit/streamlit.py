@@ -55,7 +55,7 @@ with EDA:
 with Model:
         st.header("Classify your comment")
         # Load the model
-        model_directory = 'my_model'
+        model_directory = 'NLPStreamlit\my_model'
         #model = AutoModelForSequenceClassification.from_pretrained(model_directory, local_files_only=True)
         #tokenizer = AutoTokenizer.from_pretrained(model_directory, local_files_only=True)
         #pipeline =  TextClassificationPipeline(model=model, tokenizer=tokenizer)
