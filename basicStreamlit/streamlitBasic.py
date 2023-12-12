@@ -4,8 +4,11 @@ from fastbook import *
 from fastai.callback.fp16 import *
 from fastai.vision.all import *
 from PIL import Image
-from pathlib import Path
+import pathlib
 
+
+plt = platform.system()
+if plt == 'Linux': pathlib.WindowsPath = pathlib.PosixPath
 
 
 st.set_page_config(page_title="Leaf Classifier", page_icon="🍃", layout="wide")
