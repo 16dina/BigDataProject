@@ -1,6 +1,7 @@
 # Imports
 import streamlit as st
 import pandas as pd
+from transformers import AutoModel
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 from transformers import AutoModelForSequenceClassification, AutoTokenizer, TextClassificationPipeline
 
@@ -55,7 +56,7 @@ with Model:
         st.header("Classify your comment")
         # Load the model
         model_directory = 'my_model'
-        model = AutoModelForSequenceClassification.from_pretrained(model_directory, local_files_only=True)
+        model = AutoModel.from_pretrained(model_directory, local_files_only=True)
         tokenizer = AutoTokenizer.from_pretrained(model_directory, local_files_only=True)
         pipeline =  TextClassificationPipeline(model=model, tokenizer=tokenizer)
         col5, col6 = st.columns(2)
