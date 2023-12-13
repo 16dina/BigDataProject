@@ -3,7 +3,7 @@ import streamlit as st
 import pandas as pd
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 from transformers import AutoModelForSequenceClassification, AutoTokenizer, TextClassificationPipeline
-
+#Update Comment for git
 # Page styling
 st.set_page_config(page_title="NLP", page_icon="📜", layout="wide")
 
